@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2026 Doubles Tournament — Triangle Table Tennis Tournament</title>
+<meta name="description" content="2026 Triangle Table Tennis Tournament doubles round robin: 6 teams formed from singles performances, competing in a full round robin." />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <div class="brand">
+      <span class="ball">🏓</span>
+      <div>
+        Triangle TTT
+        <small>World Cup 2026 Edition</small>
+      </div>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="singles.html">2026 Singles</a>
+      <a href="doubles.html" class="active">2026 Doubles</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding: 52px 24px;">
+  <div class="hero-inner">
+    <span class="eyebrow">🤝 Doubles Tournament</span>
+    <h1 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">2026 Doubles Tournament</h1>
+    <p class="lead">6 teams, formed based on singles tournament performances, face off in a full round robin — every team plays every other team once.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="pending-banner">
+      <span class="dot"></span>
+      Doubles pairings are determined by singles tournament results. Teams below are placeholders and will be updated once singles play concludes and teams are finalized.
+    </div>
+
+    <div class="section-head">
+      <span class="tag">Format</span>
+      <h2>Full Round Robin</h2>
+      <p>No knockout bracket — every team plays every other team once, and the final standings decide the winner.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <h4>Teams Formed</h4>
+        <p>6 doubles teams are paired up based on how players performed in the singles tournament.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <h4>Round Robin</h4>
+        <p>Every team plays each of the other 5 teams exactly once — 15 matches total across 5 rounds.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">🏆</span>
+        <h4>Final Standings</h4>
+        <p>No bracket — the team with the best record after all matches is the doubles champion.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <span class="tag">Teams</span>
+      <h2>2026 Doubles Teams</h2>
+      <p>Placeholder team names — click any name below to rename it once real rosters are finalized.</p>
+    </div>
+
+    <div id="teams-container"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="tag">Live Scoreboard</span>
+      <h2>Round Robin Schedule</h2>
+      <p>5 rounds, 3 matches per round — enter each match score and the standings below update automatically.</p>
+    </div>
+
+    <div class="scoreboard-toolbar">
+      <span class="data-note">💾 Saved automatically in this browser</span>
+      <button class="btn-small danger" id="reset-doubles-btn">Reset All Doubles Data</button>
+    </div>
+
+    <div id="schedule-container"></div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <span class="tag">Standings</span>
+      <h2>Doubles Standings</h2>
+      <p>Updated live as match scores are entered — win/loss record determines the final champion.</p>
+    </div>
+
+    <div id="standings-container"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="foot-brand">🏓 Triangle Table Tennis Tournament</div>
+  <div>World Cup 2026 Edition — August 8, 2026</div>
+</footer>
+
+<script src="assets/script.js"></script>
+<script src="assets/tournament-data.js"></script>
+<script src="assets/doubles-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2026 Singles Tournament — Triangle Table Tennis Tournament</title>
+<meta name="description" content="2026 Triangle Table Tennis Tournament singles bracket: 13 players, 4 groups, round robin group stage, and an 8-player knockout." />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <div class="brand">
+      <span class="ball">🏓</span>
+      <div>
+        Triangle TTT
+        <small>World Cup 2026 Edition</small>
+      </div>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="singles.html" class="active">2026 Singles</a>
+      <a href="doubles.html">2026 Doubles</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding: 52px 24px;">
+  <div class="hero-inner">
+    <span class="eyebrow">🏆 Singles Tournament</span>
+    <h1 style="font-size: clamp(1.8rem, 4vw, 2.8rem);">2026 Singles Tournament</h1>
+    <p class="lead">13 players. 4 groups. Round robin, then knockout — Quarterfinals, Semifinals, Third Place Match, and the Final.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="tag">Format</span>
+      <h2>Group Stage → Knockout</h2>
+      <p>Every player represents a nation from the 2026 FIFA World Cup.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">A</span>
+        <h4>3 Groups of 3</h4>
+        <p>Groups A, B, and C each contain 3 players in a round robin.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">D</span>
+        <h4>1 Group of 4</h4>
+        <p>Group D contains 4 players, also playing a full round robin.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">✓</span>
+        <h4>Top 2 Advance</h4>
+        <p>The top 2 finishers from each of the 4 groups move on — 8 players total.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">🏆</span>
+        <h4>Knockout Stage</h4>
+        <p>Quarterfinals, Semifinals, a Third Place Match, and the Final.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <span class="tag">Live Scoreboard</span>
+      <h2>Group Draw &amp; Match Results</h2>
+      <p>Set the group draw once, then enter match scores below — standings and the knockout bracket update automatically as results come in.</p>
+    </div>
+
+    <div class="scoreboard-toolbar">
+      <span class="data-note">💾 Saved automatically in this browser</span>
+      <button class="btn-small danger" id="reset-singles-btn">Reset All Singles Data</button>
+    </div>
+
+    <div id="setup-panel"></div>
+    <div id="groups-container"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="tag">The Field</span>
+      <h2>13 Confirmed Singles Players</h2>
+      <p>Each player represents their assigned nation from the 2026 World Cup.</p>
+    </div>
+
+    <div class="roster-grid">
+      <div class="player-chip"><span class="flag">🇪🇸</span><div><div class="name">Noah</div><div class="country">Spain</div></div></div>
+      <div class="player-chip"><span class="flag">🇦🇷</span><div><div class="name">Ishan</div><div class="country">Argentina</div></div></div>
+      <div class="player-chip"><span class="flag">🇧🇷</span><div><div class="name">Sarim</div><div class="country">Brazil</div></div></div>
+      <div class="player-chip"><span class="flag">🇫🇷</span><div><div class="name">Milon</div><div class="country">France</div></div></div>
+      <div class="player-chip"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><div><div class="name">Hye</div><div class="country">England</div></div></div>
+      <div class="player-chip"><span class="flag">🇧🇪</span><div><div class="name">Ripon</div><div class="country">Belgium</div></div></div>
+      <div class="player-chip"><span class="flag">🇲🇦</span><div><div class="name">Shuvo</div><div class="country">Morocco</div></div></div>
+      <div class="player-chip"><span class="flag">🇨🇭</span><div><div class="name">Ausdin</div><div class="country">Switzerland</div></div></div>
+      <div class="player-chip"><span class="flag">🇳🇴</span><div><div class="name">Shams</div><div class="country">Norway</div></div></div>
+      <div class="player-chip"><span class="flag">🇵🇹</span><div><div class="name">Swap</div><div class="country">Portugal</div></div></div>
+      <div class="player-chip"><span class="flag">🇨🇴</span><div><div class="name">Hafiz</div><div class="country">Colombia</div></div></div>
+      <div class="player-chip"><span class="flag">🇪🇬</span><div><div class="name">Rajib</div><div class="country">Egypt</div></div></div>
+      <div class="player-chip"><span class="flag">🇺🇸</span><div><div class="name">Quamrul</div><div class="country">USA</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <span class="tag">Knockout Stage</span>
+      <h2>Top 8 Bracket</h2>
+      <p>The top 2 finishers from each group fill the 8 knockout slots automatically. Enter a score for each match to advance the winner to the next round.</p>
+    </div>
+
+    <div id="bracket-container"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="foot-brand">🏓 Triangle Table Tennis Tournament</div>
+  <div>World Cup 2026 Edition — August 8, 2026</div>
+</footer>
+
+<script src="assets/script.js"></script>
+<script src="assets/tournament-data.js"></script>
+<script src="assets/singles-app.js"></script>
+</body>
+</html>
