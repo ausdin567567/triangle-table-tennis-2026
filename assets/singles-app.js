@@ -259,7 +259,7 @@
       }).join("");
 
       html += '<div class="group-card">' +
-        '<div class="group-head">Group ' + g + (gr.complete ? "" : '<span class="group-provisional">Live</span>') + '<span class="count">' + state.groups[g].length + ' Players</span></div>' +
+        '<div class="group-head group-head-' + g.toLowerCase() + '">Group ' + g + (gr.complete ? "" : '<span class="group-provisional">Live</span>') + '<span class="count">' + state.groups[g].length + ' Players</span></div>' +
         '<div class="table-wrap"><table class="standings-mini"><thead><tr><th>Player</th><th>P</th><th>W</th><th>L</th><th>+/-</th></tr></thead><tbody>' + standingsRows + '</tbody></table></div>' +
         '<div class="match-list">' + matchRows + '</div>' +
       '</div>';

@@ -13,6 +13,14 @@
   --red-card: #c0392b;
   --shadow: 0 10px 30px rgba(7, 42, 32, 0.12);
   --radius: 14px;
+
+  /* World Cup accent colors — used sparingly for group badges, card accents, and page eyebrows */
+  --accent-blue: #1d4fbd;
+  --accent-blue-bright: #4d7ce8;
+  --accent-red: #d1352f;
+  --accent-red-bright: #ea5c56;
+  --accent-teal: #0e8f7e;
+  --accent-teal-bright: #1cb39f;
 }
 
 * { box-sizing: border-box; }
@@ -125,6 +133,22 @@ img { max-width: 100%; display: block; }
   .nav-links a { padding: 12px 16px; }
 }
 
+/* ===== Flag ribbon (decorative bunting stripe) ===== */
+
+.flag-ribbon {
+  display: flex;
+  height: 6px;
+}
+
+.flag-ribbon span { flex: 1; }
+
+.flag-ribbon span:nth-child(6n+1) { background: var(--gold); }
+.flag-ribbon span:nth-child(6n+2) { background: var(--accent-blue); }
+.flag-ribbon span:nth-child(6n+3) { background: var(--accent-red); }
+.flag-ribbon span:nth-child(6n+4) { background: var(--pitch-green); }
+.flag-ribbon span:nth-child(6n+5) { background: var(--accent-teal); }
+.flag-ribbon span:nth-child(6n+6) { background: var(--accent-blue-bright); }
+
 /* ===== Hero ===== */
 
 .hero {
@@ -169,6 +193,10 @@ img { max-width: 100%; display: block; }
   border-radius: 999px;
   margin-bottom: 22px;
 }
+
+.eyebrow-blue { border-color: rgba(77,124,232,0.55); color: var(--accent-blue-bright); }
+.eyebrow-red { border-color: rgba(234,92,86,0.55); color: var(--accent-red-bright); }
+.eyebrow-teal { border-color: rgba(28,179,159,0.55); color: var(--accent-teal-bright); }
 
 .hero h1 {
   font-size: clamp(2rem, 5vw, 3.4rem);
@@ -281,6 +309,7 @@ img { max-width: 100%; display: block; }
 .card {
   background: var(--white);
   border: 1px solid var(--line);
+  border-top: 4px solid var(--pitch-green);
   border-radius: var(--radius);
   padding: 28px 24px;
   box-shadow: var(--shadow);
@@ -288,6 +317,10 @@ img { max-width: 100%; display: block; }
 }
 
 .card:hover { transform: translateY(-4px); }
+
+.card-grid .card:nth-child(3n+1) { border-top-color: var(--accent-blue); }
+.card-grid .card:nth-child(3n+2) { border-top-color: var(--accent-red); }
+.card-grid .card:nth-child(3n+3) { border-top-color: var(--gold); }
 
 .card .icon {
   font-size: 1.8rem;
@@ -333,6 +366,11 @@ img { max-width: 100%; display: block; }
   font-weight: 800;
   margin-bottom: 12px;
 }
+
+.steps .step:nth-child(4n+1) .step-num { background: var(--accent-blue); color: var(--white); }
+.steps .step:nth-child(4n+2) .step-num { background: var(--accent-red); color: var(--white); }
+.steps .step:nth-child(4n+3) .step-num { background: var(--gold); color: var(--pitch-green-dark); }
+.steps .step:nth-child(4n+4) .step-num { background: var(--accent-teal); color: var(--white); }
 
 .step h4 { margin: 0 0 6px; font-size: 1rem; }
 .step p { margin: 0; color: var(--muted); font-size: 0.92rem; }
@@ -386,6 +424,11 @@ img { max-width: 100%; display: block; }
   justify-content: space-between;
   align-items: center;
 }
+
+.group-card .group-head.group-head-a { background: var(--accent-blue); }
+.group-card .group-head.group-head-b { background: var(--accent-red); }
+.group-card .group-head.group-head-c { background: var(--gold); color: var(--pitch-green-dark); }
+.group-card .group-head.group-head-d { background: var(--accent-teal); }
 
 .group-card .group-head .count {
   font-size: 0.72rem;
