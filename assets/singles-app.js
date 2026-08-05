@@ -12,12 +12,30 @@
     return { p1: null, p2: null, games: emptyGames() };
   }
 
+  // Official 2026 group draw.
+  var OFFICIAL_GROUPS = {
+    A: ["milon", "rajib", "swap"],
+    B: ["hye", "ripon", "shams"],
+    C: ["noah", "shuvo", "hafiz"],
+    D: ["ishan", "sarim", "ausdin", "quamrul"]
+  };
+
   function defaultState() {
     return {
-      groupsLocked: false,
+      groupsLocked: true,
       pendingAssignments: {},
-      groups: { A: [], B: [], C: [], D: [] },
-      groupMatches: { A: [], B: [], C: [], D: [] },
+      groups: {
+        A: OFFICIAL_GROUPS.A.slice(),
+        B: OFFICIAL_GROUPS.B.slice(),
+        C: OFFICIAL_GROUPS.C.slice(),
+        D: OFFICIAL_GROUPS.D.slice()
+      },
+      groupMatches: {
+        A: roundRobinPairs(OFFICIAL_GROUPS.A),
+        B: roundRobinPairs(OFFICIAL_GROUPS.B),
+        C: roundRobinPairs(OFFICIAL_GROUPS.C),
+        D: roundRobinPairs(OFFICIAL_GROUPS.D)
+      },
       knockout: {
         qf: [emptyKnockoutSlot(), emptyKnockoutSlot(), emptyKnockoutSlot(), emptyKnockoutSlot()],
         sf: [emptyKnockoutSlot(), emptyKnockoutSlot()],
@@ -162,8 +180,12 @@
         '</div>';
       document.getElementById("edit-draw-btn").addEventListener("click", function () {
         if (confirm("Editing the draw will reset all group match results. Continue?")) {
+          var prefill = {};
+          GROUP_IDS.forEach(function (g) {
+            state.groups[g].forEach(function (id) { prefill[id] = g; });
+          });
           state.groupsLocked = false;
-          state.pendingAssignments = {};
+          state.pendingAssignments = prefill;
           GROUP_IDS.forEach(function (g) { state.groups[g] = []; });
           saveState(state);
           renderAll();
