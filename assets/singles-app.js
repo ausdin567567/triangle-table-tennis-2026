@@ -43,19 +43,59 @@
     };
   }
 
+  // Only trust stored match data if it's for the same players in the same
+  // order as the current official draw — otherwise a stale save (e.g. from
+  // before the draw was finalized) could silently blank out real players.
+  function matchesOfficialPairs(stored, ids) {
+    if (!Array.isArray(stored)) return false;
+    var official = roundRobinPairs(ids);
+    if (stored.length !== official.length) return false;
+    for (var i = 0; i < official.length; i++) {
+      if (!stored[i] || stored[i].p1 !== official[i].p1 || stored[i].p2 !== official[i].p2) return false;
+    }
+    return true;
+  }
+
+  // A stored slot is only usable if it carries a well-formed 3-game array;
+  // older saves used a different shape and would otherwise crash rendering.
+  function loadSlot(stored, fallback) {
+    if (!stored || !Array.isArray(stored.games) || stored.games.length !== 3) return fallback;
+    var ok = stored.games.every(function (g) {
+      return g && typeof g.a === "number" && typeof g.b === "number";
+    });
+    return ok ? stored : fallback;
+  }
+
+  function loadKnockout(stored, base) {
+    if (!stored) return base;
+    return {
+      qf: base.qf.map(function (slot, i) { return loadSlot(stored.qf && stored.qf[i], slot); }),
+      sf: base.sf.map(function (slot, i) { return loadSlot(stored.sf && stored.sf[i], slot); }),
+      final: loadSlot(stored.final, base.final),
+      third: loadSlot(stored.third, base.third)
+    };
+  }
+
   function loadState() {
+    var base = defaultState();
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return defaultState();
+      if (!raw) return base;
       var parsed = JSON.parse(raw);
-      var base = defaultState();
-      return Object.assign(base, parsed, {
-        groups: Object.assign(base.groups, parsed.groups),
-        groupMatches: Object.assign(base.groupMatches, parsed.groupMatches),
-        knockout: Object.assign(base.knockout, parsed.knockout)
+
+      var groupMatches = {};
+      GROUP_IDS.forEach(function (g) {
+        var stored = parsed.groupMatches && parsed.groupMatches[g];
+        groupMatches[g] = matchesOfficialPairs(stored, OFFICIAL_GROUPS[g]) ? stored : base.groupMatches[g];
       });
+
+      return {
+        groups: base.groups,
+        groupMatches: groupMatches,
+        knockout: loadKnockout(parsed.knockout, base.knockout)
+      };
     } catch (e) {
-      return defaultState();
+      return base;
     }
   }
 
