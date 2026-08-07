@@ -1,8 +1,8 @@
 // Interactive scoreboard for the 2026 Singles Tournament.
-// Group draw + match results are entered by the user and stored in
-// localStorage. Each matchup is a set: best-of-3 games to 11 (win by 2).
-// Group standings, knockout matchups, and the champion all recompute
-// live from the entered game scores.
+// Groups are the official 2026 draw (fixed). Match results are entered
+// by the user and stored in localStorage. Each matchup is a set:
+// best-of-3 games to 11 (win by 2). Group standings, knockout matchups,
+// and the champion all recompute live from the entered game scores.
 
 (function () {
   var STORAGE_KEY = "ttt2026_singles_state_v2";
@@ -22,8 +22,6 @@
 
   function defaultState() {
     return {
-      groupsLocked: true,
-      pendingAssignments: {},
       groups: {
         A: OFFICIAL_GROUPS.A.slice(),
         B: OFFICIAL_GROUPS.B.slice(),
@@ -133,9 +131,9 @@
       var standings = computeStandings(ids, state.groupMatches[g] || []);
       groupResults[g] = {
         standings: standings,
-        complete: state.groupsLocked && allMatchesPlayed(state.groupMatches[g] || []),
-        winner: state.groupsLocked && standings[0] ? standings[0].id : null,
-        runnerup: state.groupsLocked && standings[1] ? standings[1].id : null
+        complete: allMatchesPlayed(state.groupMatches[g] || []),
+        winner: standings[0] ? standings[0].id : null,
+        runnerup: standings[1] ? standings[1].id : null
       };
     });
 
@@ -168,99 +166,9 @@
 
   // ---- Rendering ----
 
-  function renderSetupPanel() {
-    var container = document.getElementById("setup-panel");
-    if (!container) return;
-
-    if (state.groupsLocked) {
-      container.innerHTML =
-        '<div class="locked-banner">' +
-          '<span>✅ Group draw is locked in. Enter game scores below to update standings live.</span>' +
-          '<button class="btn-small" id="edit-draw-btn">Edit Draw</button>' +
-        '</div>';
-      document.getElementById("edit-draw-btn").addEventListener("click", function () {
-        if (confirm("Editing the draw will reset all group match results. Continue?")) {
-          var prefill = {};
-          GROUP_IDS.forEach(function (g) {
-            state.groups[g].forEach(function (id) { prefill[id] = g; });
-          });
-          state.groupsLocked = false;
-          state.pendingAssignments = prefill;
-          GROUP_IDS.forEach(function (g) { state.groups[g] = []; });
-          saveState(state);
-          renderAll();
-        }
-      });
-      return;
-    }
-
-    var assignments = state.pendingAssignments || {};
-    var rows = SINGLES_PLAYERS.map(function (p) {
-      var current = assignments[p.id] || "";
-      var opts = ["", "A", "B", "C", "D"].map(function (g) {
-        var label = g === "" ? "Unassigned" : "Group " + g;
-        return '<option value="' + g + '"' + (g === current ? " selected" : "") + ">" + label + "</option>";
-      }).join("");
-      return '<tr><td>' + p.flag + " " + p.name + '</td><td>' + p.country + '</td>' +
-        '<td><select data-player="' + p.id + '">' + opts + '</select></td></tr>';
-    }).join("");
-
-    var counts = { A: 0, B: 0, C: 0, D: 0 };
-    Object.keys(assignments).forEach(function (id) {
-      var g = assignments[id];
-      if (counts.hasOwnProperty(g)) counts[g]++;
-    });
-
-    var valid = GROUP_IDS.every(function (g) { return counts[g] === GROUP_SIZES[g]; });
-
-    var countChips = GROUP_IDS.map(function (g) {
-      var ok = counts[g] === GROUP_SIZES[g];
-      return '<span class="group-count-chip' + (ok ? " ok" : "") + '">Group ' + g + ": " + counts[g] + "/" + GROUP_SIZES[g] + "</span>";
-    }).join("");
-
-    container.innerHTML =
-      '<div class="setup-panel">' +
-        '<h3>Set The Group Draw</h3>' +
-        '<p class="setup-sub">Assign each of the 13 players to Group A, B, C, or D (3, 3, 3, and 4 players). Once saved, round robin matches are generated automatically.</p>' +
-        '<div class="table-wrap"><table class="assign-table"><thead><tr><th>Player</th><th>Country</th><th>Group</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
-        '<div class="group-counts">' + countChips + '</div>' +
-        '<div class="setup-actions">' +
-          '<button class="btn-small primary" id="save-draw-btn"' + (valid ? "" : " disabled") + '>Save Draw &amp; Generate Matches</button>' +
-          (valid ? "" : '<p class="setup-warning">Assign every player to reach 3 / 3 / 3 / 4 before saving.</p>') +
-        '</div>' +
-      '</div>';
-
-    container.querySelectorAll("select[data-player]").forEach(function (sel) {
-      sel.addEventListener("change", function () {
-        state.pendingAssignments[sel.getAttribute("data-player")] = sel.value;
-        saveState(state);
-        renderSetupPanel();
-      });
-    });
-
-    var saveBtn = document.getElementById("save-draw-btn");
-    if (saveBtn) {
-      saveBtn.addEventListener("click", function () {
-        if (!valid) return;
-        GROUP_IDS.forEach(function (g) {
-          state.groups[g] = SINGLES_PLAYERS.filter(function (p) { return assignments[p.id] === g; }).map(function (p) { return p.id; });
-          state.groupMatches[g] = roundRobinPairs(state.groups[g]);
-        });
-        state.groupsLocked = true;
-        saveState(state);
-        renderAll();
-      });
-    }
-  }
-
   function renderGroups(bracket) {
     var container = document.getElementById("groups-container");
     if (!container) return;
-
-    if (!state.groupsLocked) {
-      container.innerHTML = '<div class="pending-banner"><span class="dot"></span>Complete the group draw above to generate groups and match schedules.</div>';
-      return;
-    }
 
     var html = '<div class="group-grid">';
     GROUP_IDS.forEach(function (g) {
@@ -359,13 +267,12 @@
 
   function renderAll() {
     var bracket = computeBracket();
-    renderSetupPanel();
     renderGroups(bracket);
     renderBracket(bracket);
   }
 
   function resetAll() {
-    if (!confirm("Reset all singles group draw and match results? This cannot be undone.")) return;
+    if (!confirm("Reset all singles match results? This cannot be undone.")) return;
     state = defaultState();
     saveState(state);
     renderAll();

@@ -16,8 +16,6 @@ const SINGLES_PLAYERS = [
   { id: "quamrul", name: "Quamrul", country: "USA", flag: "🇺🇸" }
 ];
 
-const GROUP_SIZES = { A: 3, B: 3, C: 3, D: 4 };
-
 function getPlayer(id) {
   return SINGLES_PLAYERS.find(function (p) { return p.id === id; }) || null;
 }
