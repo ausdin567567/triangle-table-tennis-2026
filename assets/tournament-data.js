@@ -26,21 +26,21 @@ const OFFICIAL_GROUPS = {
 
 // Official playing order for the 15 group stage matches.
 const SINGLES_SCHEDULE = [
-  ["ausdin", "quamrul"],
-  ["milon", "rajib"],
-  ["hye", "ripon"],
-  ["ishan", "sarim"],
-  ["noah", "shuvo"],
+  ["quamrul", "sarim"],
   ["milon", "swap"],
-  ["sarim", "quamrul"],
+  ["ausdin", "ishan"],
+  ["noah", "shuvo"],
   ["hye", "shams"],
+  ["ishan", "quamrul"],
+  ["milon", "rajib"],
   ["noah", "hafiz"],
-  ["ishan", "ausdin"],
-  ["rajib", "swap"],
-  ["ripon", "shams"],
   ["sarim", "ausdin"],
-  ["shuvo", "hafiz"],
-  ["ishan", "quamrul"]
+  ["ripon", "shams"],
+  ["rajib", "swap"],
+  ["ishan", "sarim"],
+  ["hye", "ripon"],
+  ["ausdin", "quamrul"],
+  ["shuvo", "hafiz"]
 ];
 
 function getPlayer(id) {
