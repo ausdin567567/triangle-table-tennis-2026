@@ -109,32 +109,9 @@
     return pairs;
   }
 
+  // Ranking and tiebreakers live in tournament-data.js (shared with doubles).
   function computeStandings(ids, matches) {
-    var rows = {};
-    ids.forEach(function (id) {
-      rows[id] = { id: id, played: 0, wins: 0, losses: 0, gf: 0, ga: 0 };
-    });
-    matches.forEach(function (m) {
-      var mr = computeMatchFromGames(m.games);
-      if (!mr.winner) return;
-      var r1 = rows[m.p1], r2 = rows[m.p2];
-      if (!r1 || !r2) return;
-      r1.played++; r2.played++;
-      r1.gf += mr.gw1; r1.ga += mr.gw2;
-      r2.gf += mr.gw2; r2.ga += mr.gw1;
-      if (mr.winner === 1) { r1.wins++; r2.losses++; }
-      else { r2.wins++; r1.losses++; }
-    });
-    var list = ids.map(function (id) { return rows[id]; });
-    list.sort(function (a, b) {
-      var ptsA = a.wins * 2, ptsB = b.wins * 2;
-      if (ptsB !== ptsA) return ptsB - ptsA;
-      var gdA = a.gf - a.ga, gdB = b.gf - b.ga;
-      if (gdB !== gdA) return gdB - gdA;
-      if (b.gf !== a.gf) return b.gf - a.gf;
-      return 0;
-    });
-    return list;
+    return rankRoundRobin(ids, matches || []);
   }
 
   function allMatchesPlayed(matches) {
@@ -212,7 +189,9 @@
         var p = getPlayer(row.id);
         return '<tr class="' + (advancing ? "advancing" : "") + '">' +
           '<td>' + (advancing ? '<span class="rank-badge">' + (idx + 1) + '</span>' : "") + p.flag + " " + p.name + '</td>' +
-          '<td>' + row.played + '</td><td>' + row.wins + '</td><td>' + row.losses + '</td><td>' + (row.gf - row.ga) + '</td>' +
+          '<td>' + row.wins + "–" + row.losses + '</td>' +
+          '<td>' + row.gamesW + "–" + row.gamesL + '</td>' +
+          '<td>' + row.pointsW + "–" + row.pointsL + '</td>' +
           '</tr>';
       }).join("");
 
@@ -224,7 +203,7 @@
 
       html += '<div class="group-card">' +
         '<div class="group-head group-head-' + g.toLowerCase() + '">Group ' + g + (gr.complete ? "" : '<span class="group-provisional">Live</span>') + '<span class="count">' + state.groups[g].length + ' Players</span></div>' +
-        '<div class="table-wrap"><table class="standings-mini"><thead><tr><th>Player</th><th>P</th><th>W</th><th>L</th><th>+/-</th></tr></thead><tbody>' + standingsRows + '</tbody></table></div>' +
+        '<div class="table-wrap"><table class="standings-mini"><thead><tr><th>Player</th><th>W–L</th><th>Games</th><th>Points</th></tr></thead><tbody>' + standingsRows + '</tbody></table></div>' +
         '<div class="match-list">' + matchRows + '</div>' +
       '</div>';
     });

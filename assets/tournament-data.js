@@ -62,6 +62,128 @@ function playerLabel(id) {
   return p ? p.flag + " " + p.name : "TBD";
 }
 
+// ===== Round robin standings & tiebreakers =====
+//
+// Players are ranked by matches won. Ties are broken, in order, by:
+//   1. Head to head record
+//   2. Games won / games lost   (ratio)
+//   3. Points won / points conceded (ratio)
+//
+// Following standard table tennis practice, every tiebreaker is calculated
+// using ONLY the matches played between the tied players. If a tiebreaker
+// splits a tied block into smaller groups, the process repeats within each
+// remaining group.
+
+function blankStandingsRow(id) {
+  return {
+    id: id, played: 0, wins: 0, losses: 0,
+    gamesW: 0, gamesL: 0, pointsW: 0, pointsL: 0
+  };
+}
+
+// Tally stats for `ids` across `matches`, counting only decided matches where
+// both players are within `ids`.
+function tallyStandings(ids, matches) {
+  var rows = {};
+  ids.forEach(function (id) { rows[id] = blankStandingsRow(id); });
+
+  (matches || []).forEach(function (m) {
+    if (!m || !rows.hasOwnProperty(m.p1) || !rows.hasOwnProperty(m.p2)) return;
+    var mr = computeMatchFromGames(m.games);
+    if (!mr.winner) return;
+
+    var r1 = rows[m.p1], r2 = rows[m.p2];
+    r1.played++; r2.played++;
+    r1.gamesW += mr.gw1; r1.gamesL += mr.gw2;
+    r2.gamesW += mr.gw2; r2.gamesL += mr.gw1;
+
+    m.games.forEach(function (g) {
+      if (gameResult(g.a, g.b) === 0) return;
+      r1.pointsW += g.a; r1.pointsL += g.b;
+      r2.pointsW += g.b; r2.pointsL += g.a;
+    });
+
+    if (mr.winner === 1) { r1.wins++; r2.losses++; }
+    else { r2.wins++; r1.losses++; }
+  });
+
+  return ids.map(function (id) { return rows[id]; });
+}
+
+// A won/lost ratio. An unbeaten record (no losses) outranks any finite ratio.
+function wlRatio(won, lost) {
+  if (lost === 0) return won > 0 ? Infinity : 0;
+  return won / lost;
+}
+
+// Comparator applying the three tiebreakers over a restricted set of matches.
+function tiebreakComparator(ids, subMatches) {
+  var byId = {};
+  tallyStandings(ids, subMatches).forEach(function (r) { byId[r.id] = r; });
+
+  return function (a, b) {
+    var ra = byId[a.id], rb = byId[b.id];
+    if (rb.wins !== ra.wins) return rb.wins - ra.wins;
+
+    var gA = wlRatio(ra.gamesW, ra.gamesL), gB = wlRatio(rb.gamesW, rb.gamesL);
+    if (gB !== gA) return gB - gA;
+
+    var pA = wlRatio(ra.pointsW, ra.pointsL), pB = wlRatio(rb.pointsW, rb.pointsL);
+    if (pB !== pA) return pB - pA;
+
+    return 0;
+  };
+}
+
+function matchesAmong(ids, matches) {
+  return (matches || []).filter(function (m) {
+    return m && ids.indexOf(m.p1) !== -1 && ids.indexOf(m.p2) !== -1;
+  });
+}
+
+// Split an already-sorted list into runs the comparator considers equal.
+function groupEqual(sorted, cmp) {
+  var blocks = [], i = 0;
+  while (i < sorted.length) {
+    var j = i;
+    while (j + 1 < sorted.length && cmp(sorted[j], sorted[j + 1]) === 0) j++;
+    blocks.push(sorted.slice(i, j + 1));
+    i = j + 1;
+  }
+  return blocks;
+}
+
+function resolveTiedBlock(block, allMatches) {
+  var ids = block.map(function (r) { return r.id; });
+  var cmp = tiebreakComparator(ids, matchesAmong(ids, allMatches));
+  var sorted = block.slice().sort(cmp);
+
+  var out = [];
+  groupEqual(sorted, cmp).forEach(function (grp) {
+    // Recurse only when the block actually got smaller, otherwise players are
+    // tied on every criterion and the current order stands.
+    if (grp.length > 1 && grp.length < block.length) {
+      out = out.concat(resolveTiedBlock(grp, allMatches));
+    } else {
+      out = out.concat(grp);
+    }
+  });
+  return out;
+}
+
+// Rank a round robin field. `matches` entries look like { p1, p2, games }.
+function rankRoundRobin(ids, matches) {
+  var rows = tallyStandings(ids, matches);
+  rows.sort(function (a, b) { return b.wins - a.wins; });
+
+  var byWins = function (a, b) { return b.wins - a.wins; };
+  var ranked = [];
+  groupEqual(rows, byWins).forEach(function (block) {
+    ranked = ranked.concat(block.length > 1 ? resolveTiedBlock(block, matches) : block);
+  });
+  return ranked;
+}
+
 // ===== Table tennis scoring: games to 11, win by 2, best-of-3 games per set =====
 
 function emptyGames() {

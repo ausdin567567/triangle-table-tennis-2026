@@ -853,6 +853,40 @@ table.game-table input:disabled {
 
 table.tt-table td .set-editor { margin: 0 auto; }
 
+/* ===== Tiebreaker note ===== */
+
+.tiebreak-note {
+  margin-top: 28px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+}
+
+.tiebreak-note strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--pitch-green);
+  margin-bottom: 8px;
+}
+
+.tiebreak-note ol {
+  margin: 0 0 8px;
+  padding-left: 20px;
+  font-size: 0.9rem;
+}
+
+.tiebreak-note li { margin-bottom: 2px; }
+
+.tiebreak-note p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
 /* ===== Match schedule page ===== */
 
 .sched-legend {

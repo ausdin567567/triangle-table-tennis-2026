@@ -46,28 +46,18 @@
 
   var state = loadState();
 
+  // Ranking and tiebreakers live in tournament-data.js (shared with singles):
+  // matches won, then head to head, games ratio, and points ratio among the
+  // tied teams only.
   function computeStandings() {
-    var rows = state.teams.map(function (name, idx) {
-      return { idx: idx, name: name, played: 0, wins: 0, losses: 0, gf: 0, ga: 0 };
+    var ids = state.teams.map(function (_, idx) { return idx; });
+    var matches = state.matches.map(function (m) {
+      return { p1: m.t1, p2: m.t2, games: m.games };
     });
-    state.matches.forEach(function (m) {
-      var mr = computeMatchFromGames(m.games);
-      if (!mr.winner) return;
-      var r1 = rows[m.t1], r2 = rows[m.t2];
-      r1.played++; r2.played++;
-      r1.gf += mr.gw1; r1.ga += mr.gw2;
-      r2.gf += mr.gw2; r2.ga += mr.gw1;
-      if (mr.winner === 1) { r1.wins++; r2.losses++; }
-      else { r2.wins++; r1.losses++; }
+    return rankRoundRobin(ids, matches).map(function (row) {
+      row.name = state.teams[row.id];
+      return row;
     });
-    rows.sort(function (a, b) {
-      var ptsA = a.wins * 2, ptsB = b.wins * 2;
-      if (ptsB !== ptsA) return ptsB - ptsA;
-      var gdA = a.gf - a.ga, gdB = b.gf - b.ga;
-      if (gdB !== gdA) return gdB - gdA;
-      return b.gf - a.gf;
-    });
-    return rows;
   }
 
   function renderTeamNames() {
@@ -138,13 +128,16 @@
       return '<tr' + (i === 0 && row.played > 0 ? ' style="background:#fff8e6;"' : '') + '>' +
         '<td>' + (i + 1) + '</td>' +
         '<td class="team-chip">🏓 ' + row.name + (i === 0 && row.played === 5 ? " 🏆" : "") + '</td>' +
-        '<td>' + row.played + '</td><td>' + row.wins + '</td><td>' + row.losses + '</td><td>' + (row.wins * 2) + '</td>' +
+        '<td>' + row.played + '</td>' +
+        '<td>' + row.wins + "–" + row.losses + '</td>' +
+        '<td>' + row.gamesW + "–" + row.gamesL + '</td>' +
+        '<td>' + row.pointsW + "–" + row.pointsL + '</td>' +
       '</tr>';
     }).join("");
 
     container.innerHTML =
       '<div class="table-wrap"><table class="tt-table">' +
-        '<thead><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>L</th><th>Pts</th></tr></thead>' +
+        '<thead><tr><th>#</th><th>Team</th><th>P</th><th>W–L</th><th>Games</th><th>Points</th></tr></thead>' +
         '<tbody>' + rowsHtml + '</tbody>' +
       '</table></div>';
   }
