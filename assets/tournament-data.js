@@ -37,9 +37,9 @@ const SINGLES_SCHEDULE = [
   ["sarim", "ausdin"],
   ["ripon", "shams"],
   ["rajib", "swap"],
-  ["ishan", "sarim"],
-  ["hye", "ripon"],
   ["ausdin", "quamrul"],
+  ["hye", "ripon"],
+  ["ishan", "sarim"],
   ["shuvo", "hafiz"]
 ];
 
