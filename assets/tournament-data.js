@@ -16,8 +16,45 @@ const SINGLES_PLAYERS = [
   { id: "quamrul", name: "Quamrul", country: "USA", flag: "🇺🇸" }
 ];
 
+// Official 2026 singles group draw.
+const OFFICIAL_GROUPS = {
+  A: ["milon", "rajib", "swap"],
+  B: ["hye", "ripon", "shams"],
+  C: ["noah", "shuvo", "hafiz"],
+  D: ["ishan", "sarim", "ausdin", "quamrul"]
+};
+
+// Official playing order for the 15 group stage matches.
+const SINGLES_SCHEDULE = [
+  ["ausdin", "quamrul"],
+  ["milon", "rajib"],
+  ["hye", "ripon"],
+  ["ishan", "sarim"],
+  ["noah", "shuvo"],
+  ["milon", "swap"],
+  ["sarim", "quamrul"],
+  ["hye", "shams"],
+  ["noah", "hafiz"],
+  ["ishan", "ausdin"],
+  ["rajib", "swap"],
+  ["ripon", "shams"],
+  ["sarim", "ausdin"],
+  ["shuvo", "hafiz"],
+  ["ishan", "quamrul"]
+];
+
 function getPlayer(id) {
   return SINGLES_PLAYERS.find(function (p) { return p.id === id; }) || null;
+}
+
+// Which group a pair of players belongs to (both must be in the same group).
+function groupForPair(a, b) {
+  var ids = Object.keys(OFFICIAL_GROUPS);
+  for (var i = 0; i < ids.length; i++) {
+    var members = OFFICIAL_GROUPS[ids[i]];
+    if (members.indexOf(a) !== -1 && members.indexOf(b) !== -1) return ids[i];
+  }
+  return null;
 }
 
 function playerLabel(id) {

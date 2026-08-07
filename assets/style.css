@@ -853,3 +853,107 @@ table.game-table input:disabled {
 
 table.tt-table td .set-editor { margin: 0 auto; }
 
+/* ===== Match schedule page ===== */
+
+.sched-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  font-size: 0.86rem;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.sched-group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--pitch-green);
+  flex-shrink: 0;
+}
+
+.sched-group.group-a { background: var(--accent-blue); }
+.sched-group.group-b { background: var(--accent-red); }
+.sched-group.group-c { background: var(--gold); color: var(--pitch-green-dark); }
+.sched-group.group-d { background: var(--accent-teal); }
+
+table.sched-table { min-width: 560px; }
+
+table.sched-table td { vertical-align: middle; }
+
+.sched-num {
+  font-weight: 800;
+  color: var(--muted);
+  width: 42px;
+}
+
+.sched-match {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sched-player { font-weight: 700; }
+
+.sched-v {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.sched-result { white-space: nowrap; }
+
+.sched-status {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.sched-status.pending {
+  color: var(--muted);
+  background: var(--off-white);
+  border: 1px solid var(--line);
+}
+
+.sched-status.live {
+  color: #7a5c00;
+  background: #fff8e6;
+  border: 1px solid var(--gold);
+}
+
+.sched-status.done {
+  color: var(--pitch-green);
+  background: #eef6f1;
+  border: 1px solid var(--pitch-green);
+}
+
+.sched-games {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.sched-footnote {
+  margin-top: 20px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.sched-footnote a {
+  color: var(--pitch-green);
+  font-weight: 700;
+  text-decoration: underline;
+}
+

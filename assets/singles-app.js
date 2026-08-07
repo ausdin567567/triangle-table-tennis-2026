@@ -12,13 +12,7 @@
     return { p1: null, p2: null, games: emptyGames() };
   }
 
-  // Official 2026 group draw.
-  var OFFICIAL_GROUPS = {
-    A: ["milon", "rajib", "swap"],
-    B: ["hye", "ripon", "shams"],
-    C: ["noah", "shuvo", "hafiz"],
-    D: ["ishan", "sarim", "ausdin", "quamrul"]
-  };
+  // OFFICIAL_GROUPS is defined in tournament-data.js (shared with the schedule page).
 
   function defaultState() {
     return {
